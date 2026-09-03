@@ -124,7 +124,8 @@ create table public.invoice_items (
 create index invoice_items_invoice_id_idx on public.invoice_items (invoice_id);
 
 -- Convenience view: invoice totals (sum of items + tax - discount)
-create view public.invoice_totals as
+-- Uses security_invoker = true so querying user's RLS policies apply
+create or replace view public.invoice_totals with (security_invoker = true) as
 select
   i.id as invoice_id,
   i.user_id,
